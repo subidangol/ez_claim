@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Easy Claim</title>
+    <style media = "screen"></style>
+    <script defer src="/__/firebase/5.5.3/firebase-app.js"></script>
+    <script defer src="/__/firebase/5.5.3/firebase-auth.js"></script>
+    <script defer src="/__/firebase/5.5.3/firebase-database.js"></script>
+    <script defer src="/__/firebase/5.5.3/firebase-messaging.js"></script>
+    <script defer src="/__/firebase/5.5.3/firebase-storage.js"></script>
+    <script defer src="/__/firebase/5.5.3/firebase-firestore.js"></script>
+    <script defer src="/__/firebase/init.js"></script>
+    <style media = "screenstyle">
+      body {
+        display: flex;
+        min-height: 100vh;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+    
+      #uploader {
+          -webkit-apprearance: none;
+          appearance: none;
+          width: 50%;
+          margin-bottom: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <progress value = "0" max = "100" id = "uploader">0%</progress>
+    <input type = "file" value = "upload" id = "fileButton"/>
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase.js"></script>
+    <script>
+      //Initialize Firebase
+      var config = {
+      apiKey: "AIzaSyCZLu15kIqIQLFgFuFthjntjxVXBtWnrpI",
+      authDomain: "easy-claim-1.firebaseapp.com",
+      databaseURL: "https://easy-claim-1.firebaseio.com",
+      projectId: "easy-claim-1",
+      storageBucket: "easy-claim-1.appspot.com",
+      messagingSenderId: "542985516361"
+    };
+    firebase.initializeApp(config);
+
+    //Get elements
+    var uploader = document.getElementById('uploader');
+    var fileButton = document.getElementById('fileButton');
+
+    //Listen for file selection
+    fileButton.addEventListener('change', function(e) {
+      
+      //Get file
+      var file = e.target.files[0];
+
+      //Create a storage ref
+      var storageRef = firebase.storage().ref('all_items/' + file.name);
+
+      //Upload file
+      var task = storageRef.put(file);
+
+      //Update progress bar
+      task.on('state_changed',
+        function progress(snapshot) {
+          var percentage = (snapshot.bytesTransferred /
+          snapshot.totalBytes) * 100;
+          uploader.value = percentage;
+        },
+
+        function error(err) {
+          
+        },
+
+        function complete() {
+
+        }
+
+      );
+    });
+  </script>
+</body>
+  
+</html>
